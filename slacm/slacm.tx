@@ -1,0 +1,108 @@
+/*
+ * slacm dsl
+ */
+ 
+ App:
+   'app' name=ID ':'
+   		messages *= Message
+   		libraries *= Library
+   		components += Component
+   		actors += Actor
+   		deploys *= Deploy
+ ;
+ 
+ Message:
+ 	'message' name=ID 
+ ;
+ 
+ Library:
+ 	'library' (name=ID | name=STRING) 
+ ;
+ 
+ Component:
+ 	'component' name=ID ':'
+ 	 ports *= Port
+ ;
+ 
+ Port:
+  (PubPort  | SubPort | 
+   ReqPort  | RepPort | 
+   TimPort	|	
+   QryPort	| AnsPort
+   ) 
+;
+
+// Publisher port (single type)
+PubPort:
+  'pub' name=ID ':' type=[Message]
+;
+
+// Subscriber port (single type)
+SubPort:
+  'sub' name=ID ':' type=[Message] 
+;
+
+// Req port (request and reply message types) - owned by an AMI client
+// Requesting client's operation is expected to send a request on the port and then terminate. 
+// The arrival of the reply triggers the reply operation on the client   
+ReqPort:
+  'req' name=ID ':' '(' req_type=[Message]? ',' rep_type=[Message]? ')' 
+;
+
+// Rep port (request and reply message types) - owned by an AMI server
+// Server's operation is triggered by the request message.
+// The operation is expected to send a reply on the port.   
+RepPort:
+  'rep' name=ID ':' '(' req_type=[Message]? ',' rep_type=[Message]? ')' 
+;
+
+// Qry port (request and reply message types) - owned by an AMI client
+// Querying client's operation is expected to send one or more queries 
+// The arrival of the answer triggers the answer operation on the client   
+QryPort:
+  'qry' name=ID ':' '(' req_type=[Message]? ',' rep_type=[Message]? ')' 
+;
+
+// Ans port (request and reply message types) - owned by an AMI server
+// Server's operation is triggered by the query message. 
+// The operation is expected to send a answer on the port.   
+AnsPort:
+  'ans' name=ID ':' '(' req_type=[Message]? ',' rep_type=[Message]? ')' 
+;
+
+// Timer port. Optional argument is period in msec
+TimPort:
+  'timer' name=ID (period=INT)?	// Period in msec
+;
+
+Actor:
+	'actor' name=ID ':'
+    ( 'local' locals*=[Message][','] )? 		// Optional: local messages (stay within the host)
+    instances+=Instance 
+;
+
+// Instance of a component, used inside an actor
+Instance:
+   name=ID ':' type=[Component]
+;
+
+Deploy: 'host' location=Location 
+			performers+=Performer[','] 
+;
+
+Location:
+	root='root' | all='all' | ( '(' hosts+=Host[','] ')' )
+;
+
+Host:
+	name=/[\w\.-]+/
+;
+
+Performer:
+	actor=[Actor] ( '(' params=STRING ')' )? 
+;
+
+// Obligatory comment spec
+Comment:
+	/\/\/.*$/|/\/\*(.|\n)*?\*\// 
+;

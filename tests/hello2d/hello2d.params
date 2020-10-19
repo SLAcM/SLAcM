@@ -1,0 +1,13 @@
+# root + rpi4car version
+rpi4car:
+   PubActor:
+    thePub:
+      arg1: "this is arg1"
+#     arg2: use default for this one
+root:
+   SubActor:
+    theSub:
+      arg3: dir/file
+      arg4: 1.23456
+
+ 

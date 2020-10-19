@@ -1,0 +1,18 @@
+// 
+
+app HelloApp:
+    message MsgReq
+    message MsgRep
+    
+    component HelloQuery:
+      timer clock 1000
+      qry port : (MsgReq,MsgRep)
+    
+	component HelloAnswer:
+      ans port : (MsgReq,MsgRep) 							
+    
+    actor HelloActor:
+       local MsgReq, MsgRep
+       theQry1: HelloQuery
+       theQry2: HelloQuery
+       theAns: HelloAnswer

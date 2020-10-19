@@ -1,0 +1,11 @@
+# Single host version
+root:
+  HelloActor:
+    thePub:
+      arg1: "this is arg1"
+#     arg2: use default for this one
+    theSub:
+      arg3: dir/file
+      arg4: 1.23456
+
+ 

@@ -1,0 +1,43 @@
+# SLACM logging configuration file
+version: 1
+disable_existing_loggers: true
+
+formatters:
+  simpleFormatter:
+    format: "%(levelname)s:%(asctime)s:[%(hostname)s.%(process)d]:%(name)s:%(message)s"
+    # datefmt=
+    default_time_format: "%H:%M:%S"
+    default_msec_format: "%s,%03d"
+
+filters:
+  hostnameFilter:
+    "()": "slacm.config.HostnameFilter"
+  
+handlers:
+  consoleHandler:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simpleFormatter
+    filters: [hostnameFilter]
+    stream: ext://sys.stdout
+
+root:
+  level: INFO
+  propagate: 0
+  handlers: [consoleHandler]
+  
+# SLAM loggers
+#  slam_x:
+#    level: INFO
+#    propagate: 0
+#    handlers: [console]
+#    qualname: slam.x
+
+#loggers:
+#  slam_actor:
+#    level: INFO
+#    propagate: 0
+#    handlers: [consoleHandler]
+#    qualname: slacm.actor
+    
+        

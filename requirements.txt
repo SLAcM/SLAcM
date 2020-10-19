@@ -1,0 +1,10 @@
+#
+click
+netifaces
+textx
+pyzmq
+kademlia
+parse
+fabric
+ruamel.yaml
+

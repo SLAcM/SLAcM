@@ -1,0 +1,23 @@
+// 
+
+app HelloApp:
+    message Msg
+    
+    component Hello2Pub:
+      timer clock 1000
+      pub port : Msg
+    
+	component Hello2Sub:
+      sub port : Msg						
+       
+     actor PubActor:
+   		thePub : Hello2Pub  
+   
+   	 actor SubActor:
+   		theSub : Hello2Sub
+     
+ // Distributed version
+     host (rpi4car) PubActor
+     host root SubActor
+     
+  

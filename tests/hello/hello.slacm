@@ -1,0 +1,16 @@
+// 
+// Hello world app
+//
+
+app HelloApp:
+    message Msg
+    
+    component HelloTest:
+      timer clock 1000						
+    
+    actor HelloActor:
+       local Msg
+       theHello : HelloTest
+    
+    // host (rpi4car) HelloActor
+    // host root HelloActor
