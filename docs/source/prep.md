@@ -40,8 +40,8 @@ On the **development host**:
 Download the source distibution from the repository. 
 
 ```
-$ git clone ...
-$ cd SLACM
+$ git clone https://github.com/SLAcM/SLAcM.git
+$ cd SLAcM
 ```
 
 Install required packages:
@@ -58,7 +58,7 @@ $ sudo python3 setup.py install
 
 ## fab file
 
-There is a [`fab`](www.fabfile.org) file included in the package, that implements 
+There is a [`fab`](https://www.fabfile.org) file included in the package, that implements 
 some useful commands, mainly for interacting with the target hosts. These commands  
 can be run using `fab` command, but first the list of hosts should be added to the `fab` file. 
 
@@ -83,7 +83,7 @@ Edit the `fabfile.py'` and change the line
 
  
  Internal commands (for developer's use only):
- - `fab build`: rebuilds the SLACM package from the source [developers onluy[
+ - `fab build`: rebuilds the SLACM package from source
  - 	`fab get`: retrieve a remote file from a target node
  - 	`fab put`: place a local file to a target node
  - 	`fab run`: run a command on a target node

@@ -141,6 +141,9 @@ root:
       arg3: dir/file
       arg4: 1.23456
 ```
+The architecture of the application is shown below. 
+
+![Hello world, distributed](figs/slacm-hello2d.png "Hello world distibuted")
 
 ## Distributed estimator
 
@@ -267,6 +270,10 @@ class GlobalEstimator(Component):
 ```
 Note the use of the `pending` counter in the `LocalEstimator`: this ensures that the sender will process all 
 responses before sending a next one. 
+
+The architecture of the application is shown below. 
+
+![Distributed estimator](figs/slacm-dest.png "Distributed estimator")
 
 ## Use of the query/answer ports
 
