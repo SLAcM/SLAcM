@@ -55,6 +55,7 @@ class TimerThread(threading.Thread):
                     self.socket.send_pyobj(value)
             else:                                   # One shot timer
                 while 1:
+                    if self.terminated.is_set() : break  
                     self.started.wait(None)         # Wait for start
                     if self.terminated.is_set(): break
                     assert self.delay != None and self.delay > 0.0
@@ -67,13 +68,14 @@ class TimerThread(threading.Thread):
                     if self.active.is_set():        # Send tick (if active)
                         value = time.time()
                         self.socket.send_pyobj(value)
-        pass
+                break
+        self.logger.info("TimerThread.done")
             
     def activate(self):
         '''
         Activate the timer port
         '''
-
+        self.logger.info("TimerThread.activate()")
         self.active.set()
         if self.periodic:
             self.started.set()
@@ -82,15 +84,18 @@ class TimerThread(threading.Thread):
         '''
         Deactivate the timer port
         '''
+        self.logger.info("TimerThread.deactivate()")
         self.active.clear()
     
     def terminate(self):
         '''
         Terminate the timer 
         '''
+        self.logger.info("TimerThread.terminate()")
+        self.terminated.set()
         self.started.set()          # Get out of wait if we are not started
         self.waiting.set()
-        self.terminated.set()
+
     
     def getPeriod(self):
         ''' 
@@ -291,8 +296,4 @@ class TimerPort(Port):
     def send(self,msg):
         raise InvalidOperation("attempt to send() through a timer port")
     
-    
-    
-    def getInfo(self):
-        return self.info
     

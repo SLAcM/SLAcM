@@ -2,6 +2,12 @@
 version: 1
 disable_existing_loggers: true
 
+# Filter to add hostname
+filters:
+  hostnameFilter:
+    "()": "slacm.config.HostnameFilter"
+
+# Default formatter - relies on above filter
 formatters:
   simpleFormatter:
     format: "%(levelname)s:%(asctime)s:[%(hostname)s.%(process)d]:%(name)s:%(message)s"
@@ -9,10 +15,7 @@ formatters:
     default_time_format: "%H:%M:%S"
     default_msec_format: "%s,%03d"
 
-filters:
-  hostnameFilter:
-    "()": "slacm.config.HostnameFilter"
-  
+# Default handler
 handlers:
   consoleHandler:
     class: logging.StreamHandler
@@ -21,23 +24,18 @@ handlers:
     filters: [hostnameFilter]
     stream: ext://sys.stdout
 
+# Root logger - logs everything
 root:
   level: INFO
   propagate: 0
   handlers: [consoleHandler]
   
-# SLAM loggers
-#  slam_x:
+# SLACM logger - logs only selected MODULE (any module from the source tree)
+#  slacm.MODULE:
 #    level: INFO
 #    propagate: 0
 #    handlers: [console]
-#    qualname: slam.x
 
-#loggers:
-#  slam_actor:
-#    level: INFO
-#    propagate: 0
-#    handlers: [consoleHandler]
-#    qualname: slacm.actor
+    
     
         

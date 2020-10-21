@@ -256,6 +256,7 @@ class App(object):
             raise
         if not found:
             self.logger.error("Configured interface: '%s' not found" % Config.NIC_NAME)
+            self.logger.info("Using interface for '%s'" % str(globalIPs[0]))
         globalIP = globalIPs[0]
         globalMAC = globalMACs[0]
         self.netInfo = NetInfo(globalHost=globalIP, localHost=localIP, macAddress=globalMAC)

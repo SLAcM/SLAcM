@@ -228,15 +228,14 @@ class Component(object):
     STOP  = 4
 
     def __init__(self):
+        '''
+        Component base class constructor. Must be called by the derived class.
+        Runs in a parent thread (i.e. not the component thread), at which time
+        the ports are not available yet. 
+        '''
         class_ = getattr(self,'__class__')
         className = getattr(class_,'__name__')
         self.owner = class_.OWNER                   # This is set in the parent part (temporarily)
-        #
-        # Logger attributes
-        # logger: logger for this class
-        # loghandler: handler for the logger (defaults to a StreamHandler)
-        # logformatter: formatter assigned to the handler (default: Level:Time:Process:Class:Message)
-        
         qualName = self.owner.qualName
         inst_logconf = '%s-log.yaml' % qualName
         comp_logconf = '%s-log.yaml' % className
@@ -257,12 +256,12 @@ class Component(object):
             self.logger.setLevel(logging.INFO)
             self.logger.propagate=False
             if opt == 'std':
-                self.loghandler = logging.StreamHandler()
+                self.loghandler = logging.StreamHandler()       # stdout
             elif opt == 'log':
                 logFile = "%s.log" % qualName
-                self.loghandler = logging.FileHandler(logFile)
+                self.loghandler = logging.FileHandler(logFile)  # log file
             else:
-                self.loghandler = logging.NullHandler()
+                self.loghandler = logging.NullHandler()         # (null)
             self.loghandler.setLevel(logging.INFO)
             self.loghandler.addFilter(HostnameFilter())
             self.logformatter = logging.Formatter('%(levelname)s:%(asctime)s:[%(hostname)s.%(process)d]:%(name)s:%(message)s')
@@ -272,9 +271,17 @@ class Component(object):
         self.thread = None
     
     def activate(self):
+        '''
+        Method executed before the message handlers are activated. 
+        Runs in the component thread.
+        '''
         pass
     
     def deactivate(self):
+        '''
+        Method executed when the component is stopped.
+        Runs in the component thread.
+        '''
         pass
     
     
