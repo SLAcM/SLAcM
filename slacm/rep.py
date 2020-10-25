@@ -7,10 +7,10 @@ import zmq
 from slacm.port import BiPort
 
 class ReplyPort(BiPort):
+    '''
+    Reply port
+    '''
     def __init__(self, parent, name, spec):
-        '''
-        Constructor
-        '''
         super().__init__(parent,name,spec)
         self.logger.info('ReplyPort.__init__(%s)',name)
         self.instName = self.parent.name + '.' + self.name

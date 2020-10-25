@@ -18,6 +18,9 @@ from kademlia.network import Server
 SLAM_DS='tcp://127.0.0.1:'
 
 class RootServer(threading.Thread):
+    '''
+    Root discovery server thread - runs in the 'root' app. 
+    '''
     def __init__(self,port,interface):
         threading.Thread.__init__(self)
         self.logger = logging.getLogger(__name__)
@@ -43,6 +46,10 @@ class RootServer(threading.Thread):
             self.loop.call_soon_threadsafe(cb)
 
 class PeerServer(threading.Thread):
+    '''
+    Peer discovery server thread - each host (root and peer alike)
+    runs a copy of this. Peer nodes connect via the root node's RootServer.
+    '''
     SLAM_DS_GET='g'
     SLAM_DS_SET='s'
     SLAM_DS_HALT='h'
@@ -86,6 +93,10 @@ class PeerServer(threading.Thread):
         self.logger.info("peer terminated")
 
 class DiscoveryService(object):
+    '''
+    Discovery service class  - instantiated by the App (on the root and peer nodes alike). 
+    Acts as the interface of the App to the discovery service. 
+    '''
     def __init__(self,context,interface,root_port=None):
         self.logger = logging.getLogger(__name__)
         self.interface = interface
@@ -139,6 +150,10 @@ class DiscoveryService(object):
         return res
     
 class DiscoveryClient(object):
+    '''
+    Discovery service client - each component has a copy of this.  
+    Acts as the interface of the Component to the discovery service. 
+    '''
     def __init__(self,context,service):
         self.logger = logging.getLogger(__name__)
         self.ctx = context
@@ -155,6 +170,10 @@ class DiscoveryClient(object):
         return rsp
 
     def get(self,key):
+        '''
+        Lookup the value belonging to the key in the discovery service.
+        Wait until the lokoup is successful. 
+        '''
         ans = None
         while True:
             ans = self.call((PeerServer.SLAM_DS_GET,key))
@@ -163,10 +182,14 @@ class DiscoveryClient(object):
         return ans
     
     def set(self,key,value):
+        '''
+        Set the value for the key in the discovery service. 
+        '''
         return self.call((PeerServer.SLAM_DS_SET,key,value))
 
   
 if __name__ == '__main__':
+    '''Test'''
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())

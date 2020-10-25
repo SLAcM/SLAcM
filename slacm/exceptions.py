@@ -5,6 +5,9 @@ Created on Sep 19, 2020
 '''
 
 class SlacmException(Exception):
+    '''
+    Base class for all SLAcM expressions 
+    '''
     def __init__(self, message):
         super().__init__(message)
         

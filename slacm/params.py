@@ -19,7 +19,8 @@ class Params(object):
     '''
     def __init__(self, param_file=None):
         '''
-        Constructor
+        Constructor for the parameter object.
+        Loads the parameter (YAML) file. 
         '''
         self.param_file = param_file
         if param_file == None: return

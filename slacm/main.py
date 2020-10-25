@@ -21,6 +21,11 @@ def terminate(signal,frame):
     theApp.terminate()
     
 def slacm():
+    '''
+    Main entry point to SLAcM - called from the command line.
+    Arguments: model [-v|--verbose] [-r:--root host:disco_port:pub_port:sub_port]
+    The last argument is used only on remote, peer nodes. 
+    '''
     parser = argparse.ArgumentParser()
     parser.add_argument("model", help="model/package file")
     parser.add_argument("-v","--verbose", help="verbose messages", action="store_true")

@@ -17,6 +17,9 @@ from slacm.exceptions import UndefinedHandler
 from slacm.config import Config,HostnameFilter
 
 class ComponentThread(threading.Thread):
+    '''
+    Component executor thread.
+    '''
     def __init__(self,parent):
         threading.Thread.__init__(self)
         self.logger = logging.getLogger(__name__)
@@ -35,22 +38,38 @@ class ComponentThread(threading.Thread):
         self.tc = itertools.count()
     
     def get_netInfo(self):
+        '''
+        Return the network interface information. 
+        '''
         return self.netInfo
     
     def setupControl(self):
+        '''
+        Set up the inner 'control' socket (for receiving commands)
+        '''
         self.control = self.context.socket(zmq.PAIR)
         self.control.connect('inproc://part_' + self.name + '_control')
     
     def sendControl(self,msg):
+        '''
+        Send a message via the control socket (to the parent)
+        '''
         self.logger.info('sendControl[%s]: %s', self.name,str(msg))
         self.control.send_pyobj(msg)
         
     def recvControl(self):
+        '''
+        Receive a control message from the parent via the control socket.
+        '''
         msg = self.control.recv_pyobj()
         self.logger.info('recvControl[%s]: %s', self.name,str(msg))
         return msg
     
     def setupPoller(self):
+        '''
+        Setup the poller for the component thread,
+        initially for the control socket only. 
+        '''
         self.poller  = zmq.Poller()
         self.sock2NameMap = {}
         self.sock2PortMap = {}
@@ -59,6 +78,9 @@ class ComponentThread(threading.Thread):
         self.sock2PrioMap = {}
         
     def updatePoller(self):
+        '''
+        Update the poller with all the input ports. 
+        '''
         for portName in self.parent.ports:
             portObj = self.parent.ports[portName]
             portSocket = portObj.getSocket()
@@ -71,32 +93,55 @@ class ComponentThread(threading.Thread):
                     self.sock2PrioMap[portSocket] = portObj.getIndex()
                     
     def setupDisco(self):
+        ''' 
+        Setup the component as a client of the discovery service. 
+        ''' 
         self.disco_client = DiscoveryClient(self.context,self.disco_service)
 
     
     def setup(self):
+        '''
+        Execute the 'setup' phase of component initialization.
+        Construct all ports, and register the 'server' ports with the discovery service.
+        '''
         for (_portName,port) in self.parent.ports.items():
             _res = port.setup(self,self.disco_client)
             
     def finalize(self):
+        '''
+        Execute the 'finalize' phase of component initialization.
+        Finalize all ports, and connect the 'client' ports with the discovery service.
+        '''
         for (_portName,port) in self.parent.ports.items():
             _res = port.finalize(self.disco_client)
 
     def activate(self):
+        '''
+        Activate all ports.
+        '''
         for(portName,port) in self.parent.ports.items():
             _res = port.activate()
         self.component.activate()
     
     def deactivate(self):
+        '''
+        Deactivate all ports.
+        '''
         for(portName,port) in self.parent.ports.items():
             _res = port.deactivate()
         self.component.deactivate()
         
     def terminate(self):
+        '''
+        Terminate all ports.
+        '''
         for(portName,port) in self.parent.ports.items():
             _res = port.terminate()
             
     def runCommand(self,msg):
+        '''
+        Run a control command sent to the component thread by its parent actor.
+        '''
         stop,err = False,False
         try:
             if msg == Component.STOP:
@@ -124,6 +169,9 @@ class ComponentThread(threading.Thread):
         return (stop,err)
     
     def locateHandler(self,portName):
+        '''
+        Locate the handler belonging to the the name port.  
+        '''
         handler = self.handlers.get(portName,None)
         if handler:
             return handler
@@ -138,7 +186,7 @@ class ComponentThread(threading.Thread):
         
     def executeHandlerFor(self,socket):
         '''
-        Execute the handler for the socket
+        Execute the handler for the port corresponding to the socket.
         The handler is always allowed to run to completion, the operation is never preempted. 
         '''
         if socket in self.sock2PortMap:
@@ -155,12 +203,15 @@ class ComponentThread(threading.Thread):
     
     
     def __scheduler(self,sockets):
+        '''
+        Simple-minded scheduler.
+        '''
         for socket in sockets:
             self.executeHandlerFor(socket)
 
     def scheduler(self, sockets):
         '''
-         priority scheduler for the component message processing. 
+         Priority scheduler for the component message processing. 
           
          The priority order is determined by the order of component ports. The dictionary of active sockets is scanned, and the \
          they are inserted into a priority queue (according to their priority value). The queue is processed (in order of \
@@ -195,6 +246,9 @@ class ComponentThread(threading.Thread):
                     return
  
     def run(self):
+        '''
+        Main loop of component thread. 
+        '''
         self.setupControl()
         self.setupDisco()
         self.setupPoller()
@@ -217,7 +271,7 @@ class ComponentThread(threading.Thread):
 
 class Component(object):
     '''
-    classdocs
+    Base class for all components.
     '''
     OK = 0 
     ERR = -1

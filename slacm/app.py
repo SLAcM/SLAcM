@@ -39,7 +39,8 @@ DeplInfo = collections.namedtuple('DeplInfo', 'actor params')
 
 class App(object):
     '''
-    classdocs
+    Class representing an application. Instantiated by the main(), as a singleton.
+    Constructs and runs the application on the current ('root') and on remote ('peer') nodes. 
     '''
     MODE_SIMPLE = 1
     MODE_ROOT   = 2
@@ -47,7 +48,10 @@ class App(object):
     
     def __init__(self,arg,verbose,arg2):
         '''
-        Constructor
+        Constructor for the App class.
+        :param arg: name of model (.slacm) file.
+        :param verbose: verbose flag
+        :param arg2: root specification string for peer nodes, or None (for root node)
         '''
         self.verbose = verbose
         self.mode = None
@@ -173,12 +177,21 @@ class App(object):
                     self.actors[actorModel.name]=Actor(self,actorModel)
     
     def get_actor_params(self,actor):
+        '''
+        Return the parameters specific to an actor of the application. 
+        '''
         return self.params.get_actor_params(self.params_host,actor)
     
     def get_comp_params(self,actor,component):
+        '''
+        Return the parameters specific to a component of an actor of the application. 
+        '''
         return self.params.get_comp_params(self.params_host,actor,component) 
         
     def run_peers(self,dist):
+        '''
+        Launch SLAcM on the peer node/s, with the distribution parameter 
+        '''
         try:
             cmd = "slacm_run -r %s %s" % (self.peer_arg,dist)
             if Config.SUDO:
@@ -192,6 +205,9 @@ class App(object):
         return res
             
     def setup_root_ports(self):
+        '''
+        Set up ports for the root App used to communicate with peer nodes. 
+        '''
         self.root_pub = self.context.socket(zmq.PUB)
         self.root_pub_port = self.root_pub.bind_to_random_port("tcp://" + self.netInfo.globalHost)
         self.root_sub = self.context.socket(zmq.SUB)
@@ -199,10 +215,16 @@ class App(object):
         self.root_sub_port = self.root_sub.bind_to_random_port("tcp://" + self.netInfo.globalHost)
         
     def make_peer_arg(self):
+        '''
+        Form the command line argument for the peer nodes.
+        '''
         self.disco_host,self.disco_port = self.disco.root()
         self.peer_arg = "%s:%r:%r:%r" % (self.disco_host,self.disco_port,self.root_pub_port,self.root_sub_port)
     
     def setup_peer_ports(self):
+        '''
+        Set up ports for the peer App used to communicate with the root node.
+        '''
         self.peer_pub = self.context.socket(zmq.PUB)
         self.peer_pub.connect("tcp://%s:%d" % (self.root_host, self.root_sub_port))
         self.peer_sub = self.context.socket(zmq.SUB)
@@ -210,6 +232,9 @@ class App(object):
         self.peer_sub_port = self.peer_sub.connect("tcp://%s:%d" % (self.root_host, self.root_pub_port))
             
     def parse_deplo(self):
+        '''
+        Parse the deployment section of the model. 
+        '''
         on_root,on_all,on_hosts = [],[],{ }
         all_hosts = set()
         for deploy in self.model.deploys:
@@ -248,6 +273,11 @@ class App(object):
         self.peer_deplo = peer_deplo
 
     def setupInterfaces(self):
+        '''
+        Determine the network interface used to communicate within the SLAcM network.
+        Note: the root and peer nodes may use different network interfaces. 
+        Builds the network information record.
+        '''
         (globalIPs,globalMACs,_globalNames,localIP,found) = get_network_interfaces()
         try:
             assert len(globalIPs) > 0 and len(globalMACs) > 0
@@ -262,12 +292,22 @@ class App(object):
         self.netInfo = NetInfo(globalHost=globalIP, localHost=localIP, macAddress=globalMAC)
     
     def get_disco(self):
+        '''
+        Return the discovery manager.
+        '''
         return self.disco
     
     def get_netInfo(self):
+        '''
+        Return the network information record.
+        '''
         return self.netInfo
     
     def build_package(self):
+        '''
+        Build a deployment package from the content of the application folder, where the model file is contained.
+        :return tgz_file: the full path of the package file.  
+        '''
         modelFilePath = pathlib.Path(self.modelFile).resolve()
         modelFileParent = modelFilePath.parent
         currentDir = os.getcwd()
@@ -281,6 +321,10 @@ class App(object):
         return tgz_file
     
     def broadcast_to_peers(self,msg):
+        '''
+        Broadcast a message from the root to all peers.
+        :param msg: Message to broadcast
+        '''
         if self.mode == App.MODE_SIMPLE: return
         assert self.mode == App.MODE_ROOT
         try:
@@ -289,6 +333,10 @@ class App(object):
             raise PortOperationError("broadcast to peers (%d)" % e.errno) from e
         
     def collect_from_peers(self,arg=None):
+        '''
+        Collect an expected message from all peer nodes on the root node.
+        :param arg: Expected message string 
+        '''
         if self.mode == App.MODE_SIMPLE: return None
         assert self.mode == App.MODE_ROOT
         res = { }
@@ -303,6 +351,10 @@ class App(object):
         return res
 
     def recv_from_root(self,arg=None):
+        '''
+        Expect and receivee message from the root on a peer node.
+        :param arg: Message expected
+        '''
         if self.mode == App.MODE_SIMPLE: return None
         assert self.mode == App.MODE_PEER
         try:
@@ -314,6 +366,10 @@ class App(object):
         return msg
     
     def send_to_root(self,msg):
+        '''
+        Send a message to the root from a peer node.
+        :param msg: Message to send.
+        '''
         if self.mode == App.MODE_SIMPLE: return
         assert self.mode == App.MODE_PEER
         try:
@@ -322,6 +378,12 @@ class App(object):
             raise PortOperationError("send to root (%d)" % e.errno) from e
                    
     def setup(self):
+        '''
+        Execute the 'setup' and 'finalize' steps in application initialization.
+        The same code runs on the root and the peer nodes, but execution is 
+        synchronized through messages. The expected sequence: (1) peers ready,
+        (2) setup executed, (3) finalize executed. 
+        '''
         self.logger.info("App.setup: mode = %d" % self.mode)
         if  self.mode == App.MODE_ROOT:
             self.collect_from_peers('peer.ready')
@@ -369,6 +431,9 @@ class App(object):
         self.logger.info('finalize done')
         
     def run(self):
+        '''
+        Run the actors of the node (root or peer)
+        '''
         if self.mode == App.MODE_ROOT:
             self.broadcast_to_peers('root.run')
         elif self.mode == App.MODE_PEER:
@@ -382,6 +447,10 @@ class App(object):
         self.logger.info("run done")
 
     def join(self):
+        '''
+        On a root node: execute a 'join' for all actors.
+        On a peer node: wait for a 'terminate' message from the root, and then terminate
+        '''
         if self.mode == App.MODE_PEER:
             _msg = self.recv_from_root('root.terminate')
             self.terminate()
@@ -392,6 +461,9 @@ class App(object):
             self.peer_runner.join()
 
     def terminate(self):
+        '''
+        Terminate actvities of the current app. 
+        '''
         self.logger.info("terminate")
         if self.mode == App.MODE_ROOT:
             self.broadcast_to_peers('root.terminate')

@@ -13,6 +13,9 @@ from slacm.port import Port
 from slacm.exceptions import InvalidOperation
 
 class TimerThread(threading.Thread):
+    '''
+    Thread for a timer port. 
+    '''
     def __init__(self,parent):
         threading.Thread.__init__(self)
         self.logger = logging.getLogger(__name__)
@@ -153,12 +156,12 @@ class TimerThread(threading.Thread):
         
 class TimerPort(Port):
     '''
-    classdocs
+    Timer port
     '''
 
     def __init__(self, parent, name, spec):
         '''
-        Constructor
+        Constructor for a Timer port. 
         '''
         super().__init__(parent,name,spec)
         self.logger = logging.getLogger(__name__)

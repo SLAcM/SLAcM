@@ -8,10 +8,10 @@ import logging
 from slacm.port import BiPort
 
 class RequestPort(BiPort):
+    '''
+    Request port
+    '''
     def __init__(self, parent, name, spec):
-        '''
-        Constructor
-        '''
         super().__init__(parent,name,spec)
         self.logger.info('RequestPort.__init__(%s)',name)
         self.instName = self.parent.name + '.' + self.name

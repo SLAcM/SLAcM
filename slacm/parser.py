@@ -16,10 +16,17 @@ import os
 import argparse
 
 class LangError(Exception):
+    '''
+    Parser language exception class
+    '''
     def __init__(self, message):
         super(LangError, self).__init__(message)
 
 class App(object):
+    '''
+    Internal 'App' class representing an application model. Holds the
+    relevant content of the model. 
+    '''
     def __init__(self,name,messages,libraries,components,actors,deploys):
         self.name = name
         self.messages = messages
@@ -29,6 +36,13 @@ class App(object):
         self.deploys = deploys
 
 def parse_model(modelName,verbose=False,debug=False,export=False):
+    '''
+    Parse model file and construct a model object (using textX).
+    :param modelName: name of model file
+    :param verbose: verbose operation
+    :param debug: debug mode for parser
+    :param export: if true meta and model will be experted into a dot file. 
+    '''
     dir_path = os.path.dirname(os.path.abspath(__file__))
     this_folder = os.getcwd() 
     meta = metamodel_from_file(join(dir_path,'slacm.tx'),

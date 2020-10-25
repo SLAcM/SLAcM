@@ -16,10 +16,10 @@ except:
     import pickle
     
 class AnswerPort(BiPort):
+    '''
+    Answer port
+    '''
     def __init__(self, parent, name, spec):
-        '''
-        Constructor
-        '''
         super().__init__(parent,name,spec)
         self.logger.info('AnswerPort.__init__(%s)',name)
         self.instName = self.parent.name + '.' + self.name
@@ -45,6 +45,9 @@ class AnswerPort(BiPort):
         return True
 
     def __ans_recv(self,is_pyobj):   
+        '''
+        Special receive operation for answer ports.
+        '''
         try:
             msgFrames = self.socket.recv_multipart()
         except zmq.error.ZMQError as e:
@@ -57,6 +60,9 @@ class AnswerPort(BiPort):
         return result
         
     def __ans_send(self,msg,is_pyobj):
+        '''
+        Special send operation for answer ports. 
+        '''
         try:
             sendMsg = [self.__identity]
             if is_pyobj:
@@ -70,9 +76,15 @@ class AnswerPort(BiPort):
         return True
 
     def get_identity(self):
+        '''
+        Retrieve identity of the sender of last message received 
+        '''
         return self.__identity
     
     def set_identity(self,identity):
+        '''
+        Set the identity of the send target. (i.e. address)
+        '''
         self.__identity = identity
         
     def recv_pyobj(self):

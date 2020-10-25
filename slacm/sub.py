@@ -10,10 +10,10 @@ from slacm.port import UniPort
 from slacm.exceptions import PortOperationError
 
 class SubscriberPort(UniPort):
+    '''
+    Subscriber port
+    '''
     def __init__(self, parent, name, spec):
-        '''
-        Constructor
-        '''
         super().__init__(parent,name,spec)
         self.logger.info('SubscriberPort.__init__(%s)',name)
         self.instName = self.parent.name + '.' + self.name

@@ -16,11 +16,11 @@ except:
     import pickle
 
 class Port(object):
+    '''
+    Base class for all port types. 
+    '''
 
     def __init__(self, parent, name, spec=None):
-        '''
-        Constructor
-        '''
         self.logger = logging.getLogger(__name__)
         self.parent = parent
         self.name = name
@@ -61,6 +61,9 @@ class Port(object):
         pass
     
     def send_pyobj(self,msg):
+        '''
+        Send a Python object via the port. 
+        '''
         try:
             result = self.socket.send_pyobj(msg)
         except zmq.error.ZMQError as e:
@@ -68,6 +71,9 @@ class Port(object):
         return result
     
     def recv_pyobj(self):
+        '''
+        Receive a Python object via the port.
+        '''
         try:
             result = self.socket.recv_pyobj()
         except zmq.error.ZMQError as e:
@@ -75,6 +81,9 @@ class Port(object):
         return result
 
     def send(self,msg):
+        '''
+        Send a bytearray via the port. 
+        '''
         try:
             result = self.socket.send(msg)
         except zmq.error.ZMQError as e:
@@ -82,6 +91,9 @@ class Port(object):
         return result
     
     def recv(self):
+        '''
+        Receive a bytearray via the port.
+        '''
         try:
             result = self.socket.recv()
         except zmq.error.ZMQError as e:
@@ -95,6 +107,9 @@ class Port(object):
         return '%s:%d' % (self.host,self.portNum)
 
 class UniPort(Port):
+    '''
+    Base class for uni-directional ports. 
+    '''
     def __init__(self, parent, name, spec=None):
         super().__init__(parent,name,spec)
         self.isLocalPort = self.is_msg_local()
@@ -106,6 +121,9 @@ class UniPort(Port):
         return self.spec.type.name + (('@' +  self.netInfo.macAddress) if self.isLocalPort else '')
         
 class BiPort(Port):
+    '''
+    Base class for bi-directional ports
+    '''
     def __init__(self, parent, name, spec=None):
         super().__init__(parent,name,spec)
         self.isLocalPort = self.is_msg_local()

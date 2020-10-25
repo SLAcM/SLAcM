@@ -15,7 +15,7 @@ from slacm.instance import Instance
 
 class Actor(object):
     '''
-    classdocs
+    Class for application actors.
     '''
     OK = 0 
     ERR = -1
@@ -28,7 +28,8 @@ class Actor(object):
 
     def __init__(self, parent, model):
         '''
-        Constructor
+        :param parent: parent app
+        :param model: actor model object
         '''
         self.logger = logging.getLogger(__name__)
         self.parent = parent
@@ -44,21 +45,40 @@ class Actor(object):
         self.params = self.parent.get_actor_params(self.name)
         
     def getApp(self):
+        '''
+        :return parent: the parent app
+        '''
         return self.parent
     
     def get_disco(self):
+        '''
+        :return disco: the discovery object
+        '''
         return self.disco
     
     def get_netInfo(self):
+        '''
+        :return netInfo: the network interface information 
+        '''
         return self.netInfo
     
     def is_local(self,message):
+        '''
+        Return True if the message is a 'host-local' for the actor.
+        '''
         return message in self.locals
     
     def get_comp_params(self,comp):
+        '''
+        Return the parameters of a component of this actor
+        '''
         return self.parent.get_comp_params(self.name,comp)
     
     def setup(self):
+        '''
+        Execute the 'setup' operation for the actor. 
+        Launches a subprocess that runs the components. 
+        '''
         self.logger.info("Actor.setup")
         self.command = self.parentContext.socket(zmq.PAIR)
         self.parentPort = self.command.bind_to_random_port("tcp://" + self.netInfo.localHost) 
@@ -70,25 +90,42 @@ class Actor(object):
         _ack = self.command.recv_pyobj()    
 
     def finalize(self):
+        '''
+        Execute the 'finalize' operatinf for the actor
+        '''
         self.logger.info("Actor.finalize")
         self.command.send_pyobj(Actor.FINALIZE)
         _ack = self.command.recv_pyobj()
         
     def run(self):
+        '''
+        Start running the actor (i.e. its components)
+        '''
         self.logger.info("Actor.run")
         self.command.send_pyobj(Actor.START)
         _ack = self.command.recv_pyobj()
     
     def terminate(self):
+        '''
+        Terminate the actor (i.e. ist components)
+        '''
         self.logger.info("Actor.terminate")
         self.command.send_pyobj(Actor.STOP)
         _ack = self.command.recv_pyobj()
         
     def join(self):
+        '''
+        Execute a 'join' operation on the child subprocess. 
+        '''
         self.logger.info("Actor.join")
         self.child.join()
     
     def main(self):
+        '''
+        Main method of the subprocess. Creates the component instances, then launches a
+        message handler for commands coming from the parent process.  
+        
+        '''
         self.childContext = zmq.Context()
         self.control = self.childContext.socket(zmq.PAIR)
         self.control.connect("tcp://" + self.parent.netInfo.localHost + ":" + str(self.parentPort))

@@ -10,7 +10,9 @@ from slacm.port import UniPort
 from slacm.exceptions import PortOperationError
 
 class PublisherPort(UniPort):
-
+    '''
+    Publisher port
+    '''
     def __init__(self, parent, name, spec):
         '''
         Constructor
