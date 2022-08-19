@@ -23,7 +23,7 @@ class env():
     hosts = ['rpi4car']
     version = '0.0.1'
 
-@task
+@task(hosts=env.hosts)
 def run(ctx,cmd):
     """Execute command as user:<command>"""
     ctx.user = env.user
@@ -32,7 +32,7 @@ def run(ctx,cmd):
     print(result)
     return result
 
-@task
+@task(hosts=env.hosts)
 def sudo(ctx,cmd):
     """Execute command as sudo:<command>"""
     ctx.user = env.user
@@ -50,18 +50,19 @@ def check(c):
 @task
 def build(c):
     """Build package locally"""
-    c.run("python3 setup.py sdist bdist_wheel")
+    c.run("python setup.py sdist bdist_wheel")
  
 @task
 def install(c):
     """ Install package locally - must be run w/ sudo"""
-    c.sudo("python3 setup.py install")
+    c.sudo("python setup.py install")
+    c.sudo("rm -fr dist/ build/")
     
 @task
 def uninstall(c):
     """ Uninstall package locally - must be run w/ sudo"""
     package = 'slacm'
-    c.sudo('pip3 uninstall -y %s' % package)
+    c.sudo('pip uninstall -y %s' % package)
     
 @task
 def get(ctx,fileName, local_path='.'):
@@ -76,17 +77,18 @@ def put(ctx,fileName, remote_path=''):
 @task(hosts=env.hosts)
 def deploy(c):
     """Deploy package on remote host(s)"""
+    c.local("python setup.py sdist")
     package = 'slacm-' + str(env.version) + '.tar.gz'
     package_path = 'dist/' + package
     put(c,package_path)
-    sudo(c,'pip3 install %s' % package)
+    sudo(c,'pip install %s' % package)
     sudo(c,'rm -f %s' %(package))
      
 @task(hosts=env.hosts)
 def undeploy(c):
     """Uninstall package on remote hosts(s)"""
     package = 'slacm'
-    sudo(c,'pip3 uninstall -y %s' % package)
+    sudo(c,'pip uninstall -y %s' % package)
 
 @task(hosts=env.hosts)
 def wipe(c):
@@ -97,7 +99,7 @@ def wipe(c):
 def requires(c):
     """Install requirements om remote host(s)"""
     put(c,"requirements.txt")
-    sudo(c,"pip3 install -r requirements.txt")
+    sudo(c,"pip install -r requirements.txt")
     run(c,'rm -f requirements.txt')
      
 @task(hosts=env.hosts)

@@ -11,7 +11,7 @@ $ usermod -aG sudo username
 Enable passwordless sudo for 'slacm'
 ```
 sudo -s
-echo "{slacm} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/slacm-user
+echo "{slacm} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/slacm
 ```
 
 ## Set up the development host (VM)
@@ -58,23 +58,20 @@ $ sudo python3 setup.py install
 
 ## fab file
 
-There is a [`fab`](https://www.fabfile.org) file included in the package, that implements 
-some useful commands, mainly for interacting with the target hosts. These commands  
-can be run using `fab` command, but first the list of hosts should be added to the `fab` file. 
+There is a [`fabfile`](https://www.fabfile.org) included in the package, that implements some useful commands, mainly for interacting with the target hosts. These commands can be run using `fab` command in the source folder, where the fabfile is located.  The `fabfile.py` contains the name of the remote target node, in the following line: 
 
-Edit the `fabfile.py'` and change the line 
 ```
  hosts = ['rpi4car']
  ```
- so that the list has the hostnames (IP addresses) of all the target nodes. 
+
+ The list has the hostnames (or IP address as a string) of all the target nodes. 
  
  The available commands are:
  - `fab check`: connects to the target nodes, and prints their system information
- 
  - `fab requires`: installs the required 3rd party packages on all target nodes
- - `fab install`: installs SLACM on the local host - must be run as root
+ - `fab install`: installs SLACM on the local host - must be run with 'sudo'
  - `fab deploy`: installs SLACM on all target nodes
- - `fab uninstall`: unistalless SLACM from thelocal host - must be run as root
+ - `fab uninstall`: unistalless SLACM from thelocal host - must be run with 'sudo'
  - `fab undeploy`: uninstalls SLACM on all target nodes
  
  - `fab stop`: stops a running SLACM application (`slacm_run`) on the host. 
@@ -83,10 +80,10 @@ Edit the `fabfile.py'` and change the line
 
  
  Internal commands (for developer's use only):
- - `fab build`: rebuilds the SLACM package from source
- - 	`fab get`: retrieve a remote file from a target node
- - 	`fab put`: place a local file to a target node
- - 	`fab run`: run a command on a target node
- - `fab sudo`: run a sudo command on a target node
+ - `fab build`: rebuilds the SLACM package from source, on the local host 
+ - `fab get`: retrieve a remote file from a target node
+ - `fab put`: place a local file to a target node
+ - `fab run`: run a command on a target node. Example: `fab run "ls -al"`
+ - `fab sudo`: run a sudo command on a target node. Example: `fab sudo "ls -al /root"`
 
  

@@ -303,6 +303,10 @@ class App(object):
         '''
         return self.netInfo
     
+    def _slacm_uid_gid(self,tarinfo):
+        tarinfo.uname = tarinfo.gname = Config.TARGET_USER
+        return tarinfo 
+    
     def build_package(self):
         '''
         Build a deployment package from the content of the application folder, where the model file is contained.
@@ -316,7 +320,7 @@ class App(object):
         tempDir = tempfile.mkdtemp()                        # Temp folder
         tgz_file = os.path.join(tempDir,packName + '.tgz')  # Construct tgz file
         with tarfile.open(tgz_file,"w:gz") as tar:
-            tar.add(packName)
+            tar.add(packName,filter=self._slacm_uid_gid)
         os.chdir(currentDir)
         return tgz_file
     
