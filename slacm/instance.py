@@ -166,7 +166,7 @@ class Instance(object):
         '''
         self.logger.info('Instance.stop(%s: %s)',self.name,self.type.name)
         self.sendCommand(Component.STOP)
-        _ack = self.recvResp()
+        # _ack = self.recvResp()
 
     
     

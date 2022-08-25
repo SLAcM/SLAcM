@@ -56,7 +56,7 @@ def build(c):
 def install(c):
     """ Install package locally - must be run w/ sudo"""
     c.sudo("python setup.py install")
-    c.sudo("rm -fr dist/ build/")
+    c.sudo("rm -fr dist/ build/ slacm.egg-info/")
     
 @task
 def uninstall(c):

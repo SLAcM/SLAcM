@@ -91,7 +91,7 @@ class Actor(object):
 
     def finalize(self):
         '''
-        Execute the 'finalize' operatinf for the actor
+        Execute the 'finalize' operation for the actor
         '''
         self.logger.info("Actor.finalize")
         self.command.send_pyobj(Actor.FINALIZE)
@@ -111,7 +111,7 @@ class Actor(object):
         '''
         self.logger.info("Actor.terminate")
         self.command.send_pyobj(Actor.STOP)
-        _ack = self.command.recv_pyobj()
+        # _ack = self.command.recv_pyobj()    
         
     def join(self):
         '''

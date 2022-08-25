@@ -6,6 +6,7 @@ Created on Sep 18, 2020
 
 import sys
 import os,signal
+import termios
 import argparse
 import traceback
 import logging
@@ -15,9 +16,27 @@ from slacm.config import Config
 
 theConfig = None
 theApp = None
+theTermFD = None
+theTermAttr = None
+
+def saveTerm():
+    global theTermFD,theTermAttr
+    try:
+        theTermFD = sys.stdin.fileno()
+        theTermAttr = termios.tcgetattr(theTermFD)
+    except:
+        pass
+
+def restoreTerm():
+    global theTermFD,theTermAttr
+    if theTermFD:
+        termios.tcsetattr(theTermFD,termios.TCSADRAIN,theTermAttr)
+    else:
+        pass
 
 def terminate(signal,frame):
-    global theDepl
+    global theApp
+    restoreTerm()
     theApp.terminate()
     
 def slacm():
@@ -42,6 +61,7 @@ def slacm():
         print("slacm_run: model/package '%s' does not exist" % args.model)
         raise 
     
+    saveTerm()
     signal.signal(signal.SIGTERM,terminate)
     signal.signal(signal.SIGINT,terminate)
     
@@ -55,6 +75,7 @@ def slacm():
         if args.verbose:
             traceback.print_exc()
         print ("slacm_run: Fatal error: %s" % (sys.exc_info()[1],))
+        restoreTerm()
         os._exit(1)
         
 if __name__ == '__main__':
