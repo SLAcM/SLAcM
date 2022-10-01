@@ -9,6 +9,7 @@ import collections
 from contextlib import closing
 import netifaces
 from slacm.config import Config
+from sphinx.cmd.quickstart import ok
 
 NetInfo = collections.namedtuple('NetInfo','globalHost localHost macAddress')
 
@@ -53,6 +54,6 @@ def find_free_port():
         s.bind(('', 0))
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         return s.getsockname()[1]
-    
+
 if __name__ == '__main__':
     pass

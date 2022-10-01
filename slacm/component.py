@@ -318,7 +318,7 @@ class Component(object):
                 self.loghandler = logging.NullHandler()         # (null)
             self.loghandler.setLevel(logging.INFO)
             self.loghandler.addFilter(HostnameFilter())
-            self.logformatter = logging.Formatter('%(levelname)s:%(asctime)s:[%(hostname)s.%(process)d]:%(name)s:%(message)s')
+            self.logformatter = logging.Formatter('%(levelname)s:%(asctime)s:[%(hostname)s.%(process)d.%(threadName)s]:%(name)s:%(message)s')
             self.loghandler.setFormatter(self.logformatter)
             self.logger.addHandler(self.loghandler)
         #
@@ -337,7 +337,8 @@ class Component(object):
         Runs in the component thread.
         '''
         pass
-    
-    
+
+            
+        
     
         

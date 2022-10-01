@@ -1,0 +1,17 @@
+// 
+// FSM Test app
+//
+
+app FSMTestApp:
+    message Msg
+    
+    component FSMTest:
+      timer	trigger				// trigger port handles the state machine's timeout
+      timer ticker 1000 		// periodic ticker
+    
+    actor FSMActor:
+       local Msg
+       theFSM : FSMTest
+    
+    // host (rpi4car) FSMActor
+    // host root FSMActor

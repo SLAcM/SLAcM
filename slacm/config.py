@@ -41,8 +41,9 @@ class Config(object):
     SEND_TIMEOUT = -1
     RECV_TIMEOUT = -1
     NIC_NAME = None
+    TRACE = ''
     SUDO = True
-    APP_LOGS = ''
+    APP_LOGS = 'std'
     
     def __init__(self,base):
         '''

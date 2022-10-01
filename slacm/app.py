@@ -102,7 +102,6 @@ class App(object):
             pass
     
         self.logger = logging.getLogger(__name__)
-        
         self.messages = {}
         self.components = {}      
         self.actors = {}
