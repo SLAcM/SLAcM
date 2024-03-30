@@ -17,6 +17,7 @@ setup(name='slacm',
           "" : ["*.tx"]
           },
       scripts = [
-        "slacm_run"
+        "slacm_run",
+        "slacm_fab"
      ],
     zip_safe=False)

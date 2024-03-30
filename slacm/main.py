@@ -59,7 +59,7 @@ def slacm():
     if not os.path.exists(args.model):
         print(os.getcwd())
         print("slacm_run: model/package '%s' does not exist" % args.model)
-        raise 
+        os._exit(1) 
     
     saveTerm()
     signal.signal(signal.SIGTERM,terminate)

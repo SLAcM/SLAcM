@@ -117,8 +117,9 @@ The application can be terminated with a Ctrl-C (`SIGTERM`) on the terminal.
 
 ## Distributed applications
 
-The above application can be easily converted to a distributed one, where the two components run in separate actors, in separate hosts. 
-(The hosts must have SLACM installed.) 
+The above application can be easily converted to a distributed one, where the two components run in separate actors, on 
+different host machines. NOte: the hosts must have SLACM installed, and password-less ssh-access must be enabled. See section on
+'Setting up SLACM'.
 
 The application model is modified as follows:
 
@@ -192,10 +193,10 @@ send_timeout = 10000
 # recv_timeout = 1000
 
 # NIC name
-# Typical VM interface
-nic_name = enp0s8
-# Typical RPi interface   
-# nic_name = eth0 
+# Typical network interface
+nic_name = eth0
+# Typical WLAN interface   
+# nic_name = wlan0 
 sudo = True
 app_logs = std
 ```
@@ -204,7 +205,7 @@ The `target_user` specifies that name for the user accounts on the remote hosts,
 setting timeouts on send and receive operations (in milliseconds). 
 
 The `nic_name` parameter selects the network interface (as shown by the `ifconfig` command) used in accessing 
-the network with the SLACM hosts. The value shown above is typical for development VM-s. 
+the network with the SLACM hosts. 
 
 The '`sudo` option (default: `True`) controls whether the remote hosts will run the application with root privileges. This is needed
 if the application needs to access physical devices. Note that this value should go into the configuration of the host
@@ -228,10 +229,10 @@ send_timeout = 10000
 # recv_timeout = 1000
 
 # NIC name
-# Typical VM interface
-nic_name = enp0s8
-# Typical RPi interface   
-# nic_name = eth0  
+# Typical network interface
+nic_name = eth0
+# Typical WLAN interface   
+# nic_name = wlan0  
 sudo = True 
 app_logs = std
 
@@ -244,10 +245,10 @@ send_timeout = 10000
 # recv_timeout = 1000
 
 # NIC name
-# Typical VM interface
-# nic_name = enp0s8
-# Typical RPi interface   
-nic_name = eth0   
+# Typical network interface
+nic_name = eth0
+# Typical WLAN interface   
+nic_name = wlan0   
 app_logs = std
 ```
 

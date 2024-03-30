@@ -9,7 +9,6 @@ import collections
 from contextlib import closing
 import netifaces
 from slacm.config import Config
-from sphinx.cmd.quickstart import ok
 
 NetInfo = collections.namedtuple('NetInfo','globalHost localHost macAddress')
 

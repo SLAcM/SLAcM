@@ -10,7 +10,7 @@ The SLACM application developer creates components and creates an *application m
 represents how to application is assembled from components and how it is installed on the hosts. 
 Optionally, a file containing the parameter settings for the components can be supplied, as well 
 as configuration files that sets specific system configuration parameters. This package is handed
-to the slacm tool (called 'run_slacm') that runs the application.
+to the SLACM tool (called 'slacm_run') that runs the application.
 
 ## Components
 
