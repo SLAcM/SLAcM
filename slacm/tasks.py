@@ -21,7 +21,7 @@ class env():
     localPath = os.getcwd() + '/' # Path on localhost
     nodePath = '/home/slacm/'  # Path on target
     hosts = ['rpi4car']
-    version = '0.0.1'
+    version = '0.0.2'
 
 @task(hosts=env.hosts)
 def run(ctx,cmd):

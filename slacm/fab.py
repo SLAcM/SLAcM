@@ -14,13 +14,12 @@ def fab():
     # Fabric command
     parser.add_argument("fabcmd", help="fabric command")
     # List of hosts to use (instead of system configured file)
-    parser.add_argument("-hosts", default="", help="list of hosts, comma separated")   
-    args = parser.parse_args()
+    parser.add_argument("--hosts", default="", help="list of hosts, comma separated")   
+    args, unknown_args = parser.parse_known_args()
     
     fcmd = "fab"
-    fflag = "-c"    
-    fconfig = "tasks"
     
+    cflag = "--collection tasks"
     rflag = "-r"
     rpath = None
     try:
@@ -31,9 +30,9 @@ def fab():
         print('slacm is missing?')
         os.__exit(1)
 
-    fhosts = ("--hosts=" + args.hosts) if args.hosts else ""
+    fhosts = ("--hosts " + args.hosts) if args.hosts else ""
     print(rpath)    
-    cmd = str.join(' ',(fcmd,fflag,fconfig,rflag,rpath,args.fabcmd, fhosts))
+    cmd = str.join(' ',(fcmd,cflag,rflag,rpath,args.fabcmd,fhosts,*unknown_args))
     try:
         bash(cmd)
     except:

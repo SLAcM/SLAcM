@@ -55,8 +55,8 @@ $ cd SLAcM
 ```
 $ pip install -r requirements.txt --break-system-packages
 ```
-Note: Normally, the recommended way to install Python packages is use a Python Virtual Environment. However, the packages SLACM 
-needs are not interfering with system packages, hence they can be safely installed. 
+Note: The recommended way to install Python packages is to use a Python Virtual Environment and install the packages there. 
+However, the packages SLACM needs are not interfering with system packages, hence they can be safely installed. Hence the flag `--break-systemm-packages` option.
 
 - Install SLACM itself:
 ```
