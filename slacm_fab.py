@@ -4,8 +4,11 @@ Created on Oct 4, 2020
 @author: esdev
 '''
 
-from slacm.fab import fab
+import slacm.fab 
+
+def main():
+    slacm.fab._program.run()
 
 if __name__ == '__main__':
-    fab()
+    main()
     
