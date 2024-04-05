@@ -1,6 +1,6 @@
 #
 click
-netifaces
+netifaces2
 textx
 pyzmq
 kademlia

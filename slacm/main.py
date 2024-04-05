@@ -6,7 +6,6 @@ Created on Sep 18, 2020
 
 import sys
 import os,signal
-import termios
 import argparse
 import traceback
 import logging
@@ -16,29 +15,39 @@ from slacm.config import Config
 
 theConfig = None
 theApp = None
-theTermFD = None
-theTermAttr = None
 
-def saveTerm():
-    global theTermFD,theTermAttr
-    try:
-        theTermFD = sys.stdin.fileno()
-        theTermAttr = termios.tcgetattr(theTermFD)
-    except:
-        pass
+if sys.platform == "linux":
+    import termios
+    theTermFD = None
+    theTermAttr = None
 
-def restoreTerm():
-    global theTermFD,theTermAttr
-    if theTermFD:
-        termios.tcsetattr(theTermFD,termios.TCSADRAIN,theTermAttr)
-    else:
-        pass
+    def saveTerm():
+        if platform == "linux":
+            global theTermFD,theTermAttr
+            try:
+                theTermFD = sys.stdin.fileno()
+                theTermAttr = termios.tcgetattr(theTermFD)
+            except:
+                pass
 
-def terminate(signal,frame):
+    def restoreTerm():
+        global theTermFD,theTermAttr
+        if theTermFD:
+            termios.tcsetattr(theTermFD,termios.TCSADRAIN,theTermAttr)
+        else:
+            pass
+
+
+else:
+    def saveTerm(): pass
+
+    def restoreTerm(): pass
+
+def terminate(_signal,_frame):
     global theApp
     restoreTerm()
     theApp.terminate()
-    
+        
 def slacm():
     '''
     Main entry point to SLAcM - called from the command line.
@@ -79,5 +88,5 @@ def slacm():
         os._exit(1)
         
 if __name__ == '__main__':
-    pass
+    slacm()
 

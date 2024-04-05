@@ -60,7 +60,7 @@ However, the packages SLACM needs are not interfering with system packages, henc
 
 - Install SLACM itself:
 ```
-$ sudo python3 setup.py install
+$ sudo pip install .
 ```
 
 ## fab file

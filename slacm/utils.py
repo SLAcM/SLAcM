@@ -19,7 +19,7 @@ def get_network_interfaces(nicName=None):
      ''' 
     if nicName is None:
         nicName = Config.NIC_NAME
-    local = None
+    local = '127.0.0.1'
     ipAddressList = []
     macAddressList = []
     ifNameList = []
@@ -31,14 +31,14 @@ def get_network_interfaces(nicName=None):
             ifAddrs = ifInfo[netifaces.AF_INET]
             ifAddr = ifAddrs[0]['addr']
             if ifAddr == '127.0.0.1':
-                local = ifAddr
+                pass
             else:
                 ipAddressList.append(ifAddr)
                 ifNameList.append(ifName)
                 linkAddrs = netifaces.ifaddresses(ifName)[netifaces.AF_LINK]
                 linkAddr = linkAddrs[0]['addr'].replace(':','')
                 macAddressList.append(linkAddr)
-                if(nicName == ifName):
+                if(nicName == ifName) or (nicName == ifAddr):
                     ipAddressList = [ipAddressList[-1]]
                     macAddressList = [macAddressList[-1]] 
                     found = True
