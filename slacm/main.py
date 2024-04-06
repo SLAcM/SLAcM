@@ -62,13 +62,13 @@ def slacm():
     try:
         args = parser.parse_args()
     except: 
-        print ("slacm_run: unexpected error:", sys.exc_info()[0])
-        raise
+        print ("slacm_run: model parsing failed")
+        sys.exit()
 
     if not os.path.exists(args.model):
         print(os.getcwd())
         print("slacm_run: model/package '%s' does not exist" % args.model)
-        os._exit(1) 
+        sys.exit() 
     
     saveTerm()
     signal.signal(signal.SIGTERM,terminate)
@@ -85,7 +85,7 @@ def slacm():
             traceback.print_exc()
         print ("slacm_run: Fatal error: %s" % (sys.exc_info()[1],))
         restoreTerm()
-        os._exit(1)
+        sys.exit()
         
 if __name__ == '__main__':
     slacm()

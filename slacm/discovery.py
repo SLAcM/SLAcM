@@ -11,11 +11,16 @@ import zmq
 import zmq.asyncio
 import time
 import traceback
+import sys
 from slacm.utils import find_free_port
 
 from kademlia.network import Server
 
 SLAM_DS='tcp://127.0.0.1:'
+
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 
 class RootServer(threading.Thread):
     '''
