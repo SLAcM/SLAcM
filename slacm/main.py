@@ -22,13 +22,12 @@ if sys.platform == "linux":
     theTermAttr = None
 
     def saveTerm():
-        if platform == "linux":
-            global theTermFD,theTermAttr
-            try:
-                theTermFD = sys.stdin.fileno()
-                theTermAttr = termios.tcgetattr(theTermFD)
-            except:
-                pass
+        global theTermFD,theTermAttr
+        try:
+            theTermFD = sys.stdin.fileno()
+            theTermAttr = termios.tcgetattr(theTermFD)
+        except:
+            pass
 
     def restoreTerm():
         global theTermFD,theTermAttr
