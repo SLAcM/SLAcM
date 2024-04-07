@@ -33,7 +33,6 @@ try:
 except:
     cPickle = None
     import pickle
-    
 
 DeplInfo = collections.namedtuple('DeplInfo', 'actor params')
 

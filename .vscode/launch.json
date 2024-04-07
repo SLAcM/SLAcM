@@ -5,14 +5,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Module tests/hello",
+            "name": "Python Debugger: slacm.discovery",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "slacm.discovery"
+        },
+        {
+            "name": "Python Debugger: slacm.main tests/hello",
             "type": "debugpy",
             "request": "launch",
             "module": "slacm.main",
-            "args": ["-v","tests/hello/hello.slacm"]
+            "args": [
+                "-v",
+                "tests/hello/hello.slacm"
+            ]
         },
         {
-            "name": "Python Debugger: Module",
+            "name": "Python Debugger: slacm.main",
             "type": "debugpy",
             "request": "launch",
             "module": "slacm.main"

@@ -18,10 +18,6 @@ from kademlia.network import Server
 
 SLAM_DS='tcp://127.0.0.1:'
 
-if sys.platform == "win32":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
-
 class RootServer(threading.Thread):
     '''
     Root discovery server thread - runs in the 'root' app. 

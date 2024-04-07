@@ -16,31 +16,25 @@ from slacm.config import Config
 theConfig = None
 theApp = None
 
-if sys.platform == "linux":
-    import termios
-    theTermFD = None
-    theTermAttr = None
+import termios
+theTermFD = None
+theTermAttr = None
 
     def saveTerm():
-        global theTermFD,theTermAttr
-        try:
-            theTermFD = sys.stdin.fileno()
-            theTermAttr = termios.tcgetattr(theTermFD)
-        except:
-            pass
+        if platform == "linux":
+            global theTermFD,theTermAttr
+            try:
+                theTermFD = sys.stdin.fileno()
+                theTermAttr = termios.tcgetattr(theTermFD)
+            except:
+                pass
 
-    def restoreTerm():
-        global theTermFD,theTermAttr
-        if theTermFD:
-            termios.tcsetattr(theTermFD,termios.TCSADRAIN,theTermAttr)
-        else:
-            pass
-
-
-else:
-    def saveTerm(): pass
-
-    def restoreTerm(): pass
+def restoreTerm():
+    global theTermFD,theTermAttr
+    if theTermFD:
+        termios.tcsetattr(theTermFD,termios.TCSADRAIN,theTermAttr)
+    else:
+        pass
 
 def terminate(_signal,_frame):
     global theApp
@@ -87,5 +81,5 @@ def slacm():
         sys.exit()
         
 if __name__ == '__main__':
+    assert sys.platform == "linux", "unsupported platform"
     slacm()
-
