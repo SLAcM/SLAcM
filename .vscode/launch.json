@@ -5,6 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: slacm.main tests/helloqa",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "slacm.main",
+            "args": [
+                "-v",
+                "tests/helloqa/helloqa.slacm"
+            ]
+        },
+        {
+            "name": "Python Debugger: slacm.main tests/hello2",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "slacm.main",
+            "args": [
+                "-v",
+                "tests/hello2/hello2.slacm"
+            ]
+        },
+        {
             "name": "Python Debugger: slacm.discovery",
             "type": "debugpy",
             "request": "launch",
