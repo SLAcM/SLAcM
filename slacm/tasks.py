@@ -10,9 +10,9 @@ from fabric import task
 # from fabric.api import env,hosts,local,run,serial,settings, task
 #from fabric.context_managers import hide
 
-""" class env():
+class env():
     # Standard fabric configuration
-    shell = "/bin/bash -l -i -c"
+    shell = "/bin/bash"
     parallel = True            # Changes default behavior to parallel
     use_ssh_config = False     # Tells fabric to use the user's ssh config
     disable_known_hosts = True # Ignore warnings about known_hosts
@@ -20,8 +20,8 @@ from fabric import task
     # File transfer directories
     localPath = os.getcwd() + '/' # Path on localhost
     nodePath = '/home/slacm/'  # Path on target
-    hosts = ['rpi4car']
-    version = '0.0.2' """
+    # hosts = ['rpi4car']
+    version = '0.0.2'
 
 @task
 def run(ctx,cmd):
@@ -48,21 +48,16 @@ def check(c):
     run(c,'hostname && uname -a')
 
 @task
-def build(c):
-    """Build package locally"""
-    c.run("python setup.py sdist bdist_wheel")
- 
-@task
 def install(c):
     """ Install package locally - must be run w/ sudo"""
-    c.sudo("python setup.py install")
+    c.sudo("pip install . -break-system-packages")
     c.sudo("rm -fr dist/ build/ slacm.egg-info/")
     
 @task
 def uninstall(c):
     """ Uninstall package locally - must be run w/ sudo"""
     package = 'slacm'
-    c.sudo('pip uninstall -y %s' % package)
+    c.sudo('pip uninstall -y %s -break-system-packages' % package)
     
 @task
 def get(ctx,fileName, local_path='.'):
