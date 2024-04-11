@@ -2,11 +2,15 @@ from typing import List
 from invoke import Program, Argument, Collection
 from invoke.parser import Argument
 from invoke.exceptions import Exit
-from fabric import ThreadingGroup, Config
+from fabric import Executor, Config
+from fabric.main import Fab
 import slacm.tasks
 
 ns = Collection()
 slacm.tasks.namespace=ns
 ns.add_collection(slacm.tasks,"do")
 
-_program = Program(namespace=ns)
+_program = Fab(namespace=ns,
+                name="slacm_fab",
+                executor_class=Executor,
+                config_class=Config)

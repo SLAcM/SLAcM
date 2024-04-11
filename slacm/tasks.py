@@ -16,7 +16,7 @@ class env():
     parallel = True            # Changes default behavior to parallel
     use_ssh_config = False     # Tells fabric to use the user's ssh config
     disable_known_hosts = True # Ignore warnings about known_hosts
-    user = 'slacm'
+    user = os.getlogin()
     # File transfer directories
     localPath = os.getcwd() + '/' # Path on localhost
     nodePath = '/home/slacm/'  # Path on target
@@ -26,7 +26,8 @@ class env():
 @task
 def run(ctx,cmd):
     """Execute command as user:<command>"""
-    # ctx.user = env.user
+    ctx.user = env.user
+    #print(ctx.host)
     # print("["+ctx.host+"] " + cmd)
     result = ctx.run(cmd,shell=env.shell,hide=True,warn=True)
     print(result)

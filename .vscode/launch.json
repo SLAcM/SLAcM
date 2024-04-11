@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: fab do.check",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "slacm_fab.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-H", "rpi4net.local",
+                "-v",
+                "do.check"
+            ]
+        },
+        {
             "name": "Python Debugger: slacm.main tests/helloqa",
             "type": "debugpy",
             "request": "launch",

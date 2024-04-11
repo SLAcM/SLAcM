@@ -16,7 +16,7 @@ Create a user 'slacm' and add it to the 'sudo' capable users:
 $ sudo adduser slacm
 $ usermod -aG sudo username
 ```
-Enable passwordless sudo for 'slacm'
+Enable passwordless sudo for 'slacm' on the target hosts
 ```
 sudo -s
 echo "{slacm} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/slacm
