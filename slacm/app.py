@@ -152,7 +152,11 @@ class App(object):
                     dist = pathlib.Path(pack).name
                     for host in self.peer_deplo:
                         try:
-                            with fabric.connection.Connection(host,user=Config.TARGET_USER) as conn:
+                            with fabric.connection.Connection(host,user=Config.TARGET_USER,
+                                                              connect_kwargs = { 
+                                                                                "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() 
+                                                                                }) as conn:
+                                
                                 xfer = fabric.transfer.Transfer(conn)
                                 xfer.put(pack,dist)
                             self.peer_hosts += [host]

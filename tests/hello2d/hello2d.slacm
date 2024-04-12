@@ -17,7 +17,7 @@ app HelloApp:
    		theSub : Hello2Sub
      
  // Distributed version
-     host (rpi4car) PubActor
+     host (rpi4net) PubActor
      host root SubActor
      
   
