@@ -5,14 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: slacm.main tests/hello2d",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "slacm.main",
+            "args": [
+                "-v",
+                "tests/hello2d/hello2d.slacm"
+            ]
+        },
+        {
             "name": "Python Debugger: fab do.check",
             "type": "debugpy",
             "request": "launch",
             "program": "slacm_fab.py",
             "console": "integratedTerminal",
             "args": [
-                "-H", "rpi4net.local",
-                "-i", "/home/rpi4car/.ssh/id_rsa",
+                "-H",
+                "rpi4net.local",
+                "-i",
+                "/home/rpi4car/.ssh/id_rsa",
                 "do.check"
             ]
         },

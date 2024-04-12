@@ -13,6 +13,7 @@ ns.add_collection(slacm.tasks,"do")
 
 Config.user="slacm"
 Config.connect_kwargs = { "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() }
+Config.version="0.0.2"
 
 _program = Fab(namespace=ns,
                 name="slacm_fab",
