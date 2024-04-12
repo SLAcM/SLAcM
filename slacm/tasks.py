@@ -26,17 +26,15 @@ class env():
 @task
 def run(ctx,cmd):
     """Execute command as user:<command>"""
-    ctx.user = env.user
     #print(ctx.host)
     # print("["+ctx.host+"] " + cmd)
-    result = ctx.run(cmd,shell=env.shell,hide=True,warn=True)
+    result = ctx.run(cmd) # ,shell=env.shell,hide=True,warn=True)
     print(result)
     return result
 
 @task
 def sudo(ctx,cmd):
     """Execute command as sudo:<command>"""
-    ctx.user = env.user
     print("["+ctx.host+"] " + cmd)
     result = ctx.sudo(cmd,shell=env.shell,hide=True,warn=True)
     print(result)

@@ -1,3 +1,4 @@
+import os
 from typing import List
 from invoke import Program, Argument, Collection
 from invoke.parser import Argument
@@ -9,6 +10,9 @@ import slacm.tasks
 ns = Collection()
 slacm.tasks.namespace=ns
 ns.add_collection(slacm.tasks,"do")
+
+Config.user="slacm"
+Config.connect_kwargs = { "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() }
 
 _program = Fab(namespace=ns,
                 name="slacm_fab",

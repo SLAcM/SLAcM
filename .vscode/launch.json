@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 "-H", "rpi4net.local",
-                "-v",
+                "-i", "/home/rpi4car/.ssh/id_rsa",
                 "do.check"
             ]
         },

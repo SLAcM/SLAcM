@@ -22,11 +22,12 @@ sudo -s
 echo "{slacm} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/slacm
 ```
 
-## Set up the development host
+## Set up the target hosts for password-less access 
 
-Use the the **development** host to set up key-based/password-less access to all target hosts. 
+Use the the **development** host to set up key-based/password-less, key-based access to all target hosts. 
 
-- Generate a key-pair
+- Generate a key-pair, without password, on the _development_ host.
+
 ```
 $ ssh-keygen
 ```
