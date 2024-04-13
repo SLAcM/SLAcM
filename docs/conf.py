@@ -15,7 +15,7 @@
 import os
 import sys
 # sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 
@@ -193,7 +193,7 @@ import sphinx.ext.apidoc
 
 # The following section runs spinx-apidoc automatically before building the documentation
 def setup(app):
-    sphinx.ext.apidoc.main(['-f', '-T', '-e', '-o', '.', '../../slacm', '../../setup.py'])
+    sphinx.ext.apidoc.main(['-f', '-T', '-e', '-o', '.', '../slacm', '../setup.py'])
 
 # readthedocs: mock-import packages that can have C dependencies
 from unittest.mock import MagicMock
