@@ -11,13 +11,11 @@ available in Python.
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+  
    model
    apps
    samples
    prep
-   slacm
-
 
 Indices and tables
 ==================

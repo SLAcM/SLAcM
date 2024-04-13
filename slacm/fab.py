@@ -12,7 +12,10 @@ slacm.tasks.namespace=ns
 ns.add_collection(slacm.tasks,"do")
 
 Config.user="slacm"
-Config.connect_kwargs = { "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() }
+try:
+    Config.connect_kwargs = { "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() }
+except:
+    pass
 Config.version="0.0.2"
 
 _program = Fab(namespace=ns,
