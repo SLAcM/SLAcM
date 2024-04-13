@@ -131,6 +131,7 @@ class Config(object):
                 except:
                     logger.warning('Error reading configuration file %s.' % (slacm_conf))
                     continue
+                logger.info('Configuration read')
                 break
             
             

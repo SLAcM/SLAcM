@@ -1,5 +1,5 @@
-# root + rpi4car version
-rpi4car:
+# root + rpi4net version
+rpi4net:
    PubActor:
     thePub:
       arg1: "this is arg1"

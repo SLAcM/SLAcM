@@ -165,7 +165,10 @@ class App(object):
                             raise
                     self.make_peer_arg()
                     try:
-                        self.peer_group = fabric.ThreadingGroup(*self.peer_hosts,user=Config.TARGET_USER)
+                        self.peer_group = fabric.ThreadingGroup(*self.peer_hosts,user=Config.TARGET_USER,
+                                                                 connect_kwargs = { 
+                                                                                "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() 
+                                                                                })
                     except Exception as e:
                         self.logger.error("Couldn't form peer group: '%s'", str(e))
                         raise
@@ -195,7 +198,7 @@ class App(object):
         Launch SLAcM on the peer node/s, with the distribution parameter 
         '''
         try:
-            cmd = "slacm_run -r %s %s" % (self.peer_arg,dist)
+            cmd = "slacm_run %s -r %s %s" % ("-v" if self.verbose else "", self.peer_arg,dist)
             if Config.SUDO:
                 res = self.peer_group.run("sudo " + cmd)
             else:
