@@ -6,22 +6,6 @@ Created on Oct 17, 2020
 import os
 import fabric
 from fabric import task
-# from fabric import api, operations
-# from fabric.api import env,hosts,local,run,serial,settings, task
-#from fabric.context_managers import hide
-
-""" class env():
-    # Standard fabric configuration
-    shell = "/bin/bash"
-    parallel = True            # Changes default behavior to parallel
-    use_ssh_config = False     # Tells fabric to use the user's ssh config
-    disable_known_hosts = True # Ignore warnings about known_hosts
-    user = os.getlogin()
-    # File transfer directories
-    localPath = os.getcwd() + '/' # Path on localhost
-    nodePath = '/home/slacm/'  # Path on target
-    # hosts = ['rpi4car']
-    version = '0.0.2' """
 
 @task
 def run(ctx,cmd):
@@ -103,7 +87,7 @@ def kill(c):
 @task
 def stop(c):
     """Stop local slacm process"""
-    c.run("pkill -SIGTERM -f slacm_run")
+    run(c,"pkill -SIGTERM -f slacm_run")
     
 @task
 def shutdown(c):
