@@ -40,6 +40,7 @@ class Config(object):
     TARGET_USER = 'slacm'
     SEND_TIMEOUT = -1
     RECV_TIMEOUT = -1
+    DISC_TIMEOUT = -1
     NIC_NAME = None
     TRACE = ''
     SUDO = True

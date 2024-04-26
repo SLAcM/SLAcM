@@ -13,6 +13,7 @@ import time
 import traceback
 import sys
 from slacm.utils import find_free_port
+from slacm.config import Config
 
 from kademlia.network import Server
 
@@ -176,10 +177,14 @@ class DiscoveryClient(object):
         Wait until the lokoup is successful. 
         '''
         ans = None
+        tout = 3.0 if Config.DISC_TIMEOUT <= 0 else (Config.DISC_TIMEOUT / 1000.0)
+        tslp = 1.0 if Config.RECV_TIMEOUT <= 0 else (Config.RECV_TIMEOUT / 1000.0)
         while True:
             ans = self.call((PeerServer.SLAM_DS_GET,key))
             if ans: break
-            time.sleep(1.0)
+            time.sleep(tslp)
+            tout -= tslp
+            if tout <= 0: break
         return ans
     
     def set(self,key,value):

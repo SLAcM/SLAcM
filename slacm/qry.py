@@ -32,8 +32,11 @@ class QueryPort(BiPort):
     def finalize(self,disco):
         key = self.formKey()
         value = disco.get(key)
-        endPoint = "tcp://" + value
-        self.socket.connect(endPoint)
+        if value is not None:
+            endPoint = "tcp://" + value
+            self.socket.connect(endPoint)
+        else:
+            self.logger.warning('QueryPort.finalize() %s - source port lookup failed' % self.instName)
         
     def inSocket(self):
         return True
