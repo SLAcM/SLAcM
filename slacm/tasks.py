@@ -74,7 +74,7 @@ def wipe(c):
     
 @task
 def requires(c):
-    """Install requirements om remote host(s)"""
+    """Install requirements on remote host(s)"""
     put(c,"requirements.txt")
     sudo(c,"pip install -r requirements.txt --break-system-packages")
     run(c,'rm -f requirements.txt')

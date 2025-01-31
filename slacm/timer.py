@@ -245,7 +245,7 @@ class TimerPort(Port):
         Period must be positive
         '''
         if not (type(_period) == float and _period > 0.0):
-            raise InvalidOperation("invalid argument %s" % str(_period))
+            raise InvalidOperation(f"invalid argument: setPeriod({_period})")
         if self.thread != None: 
             self.thread.setPeriod(_period)
     
@@ -263,7 +263,7 @@ class TimerPort(Port):
         Set the current delay (for sporadic timer)
         '''
         if not (type(_delay) == float and _delay > 0.0):
-            raise InvalidOperation("invalid argument %s" % str(_delay))
+            raise InvalidOperation(f"invalid argument: setDelay({_delay})")
         if self.thread != None: 
             self.thread.setDelay(_delay)
         

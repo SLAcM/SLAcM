@@ -21,7 +21,7 @@ class AnswerPort(BiPort):
     '''
     def __init__(self, parent, name, spec):
         super().__init__(parent,name,spec)
-        self.logger.info('AnswerPort.__init__(%s)',name)
+        self.logger.info(f'AnswerPort.__init__({name})')
         self.instName = self.parent.name + '.' + self.name
         # parentActor = parentComponent.parent
     
@@ -51,7 +51,7 @@ class AnswerPort(BiPort):
         try:
             msgFrames = self.socket.recv_multipart()
         except zmq.error.ZMQError as e:
-            raise PortOperationError("recv error (%d)" % e.errno) from e
+            raise PortOperationError(f"recv error ({e.errno})") from e
         self.__identity = msgFrames[0]                
         if is_pyobj:
             result = pickle.loads(msgFrames[1])     
@@ -72,7 +72,7 @@ class AnswerPort(BiPort):
             sendMsg += [payload]
             self.socket.send_multipart(sendMsg)
         except zmq.error.ZMQError as e:
-            raise PortOperationError("send error (%d)" % e.errno) from e
+            raise PortOperationError(f"send error ({e.errno})") from e
         return True
 
     def get_identity(self):

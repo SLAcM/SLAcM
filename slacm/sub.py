@@ -35,7 +35,7 @@ class SubscriberPort(UniPort):
             endPoint = "tcp://" + value
             self.socket.connect(endPoint)
         else:
-            self.logger.warning('SubscriberPort.finalize() %s - source port lookup failed' % self.instName)
+            self.logger.warning(f'SubscriberPort.finalize() {self.instName}: source port lookup failed')
                 
     def inSocket(self):
         return True

@@ -179,7 +179,7 @@ class ComponentThread(threading.Thread):
             funcName = 'on_' + portName
             handler = getattr(self.component, funcName, None)
             if handler is None:
-                raise UndefinedHandler(funcName)
+                raise UndefinedHandler(f"no handler in {self.name}: {funcName}")
             else:
                 self.handlers[portName] = handler
         return handler

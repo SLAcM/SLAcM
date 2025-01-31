@@ -68,8 +68,9 @@ class App(object):
                 with tarfile.open(arg,"r:gz") as tar:
                     tar.extractall('./')
             except Exception as ex:
-                print("slacm_run: Extract app package: %s(%s)" % (str(type(ex)),str(ex.args)))
-                raise 
+                emsg = f"Extracting app package: {type(ex)}({ex.args}) failed"
+                print(f"slacm_run:{emsg}")
+                raise BuildError(emsg)
             
             app = pathlib.Path(arg).resolve().stem
             model = pathlib.Path(app,str(app) + '.slacm')
@@ -161,8 +162,9 @@ class App(object):
                                 xfer.put(pack,dist)
                             self.peer_hosts += [host]
                         except Exception as e:
-                            self.logger.error("Couldn't deploy app package: '%s'", str(e))
-                            raise
+                            emsg = f"Couldn't deploy app package on {host}: {e}"
+                            self.logger.error(emsg)
+                            raise BuildError(emsg) from e
                     self.make_peer_arg()
                     try:
                         self.peer_group = fabric.ThreadingGroup(*self.peer_hosts,user=Config.TARGET_USER,
@@ -170,8 +172,9 @@ class App(object):
                                                                                 "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() 
                                                                                 })
                     except Exception as e:
-                        self.logger.error("Couldn't form peer group: '%s'", str(e))
-                        raise
+                        emsg = f"Couldn't form peer group: '{e}'"
+                        self.logger.error(emsg)
+                        raise BuildError(emsg) from e
                     self.peer_runner = threading.Thread(target=self.run_peers, args=(dist,))
                     self.peer_runner.start()
                     time.sleep(1.0)
@@ -287,8 +290,8 @@ class App(object):
         try:
             assert len(globalIPs) > 0 and len(globalMACs) > 0
         except:
-            self.logger.error("Error: no active network interface")
-            raise
+            self.logger.error("No active network interface")
+            raise BuildError("no active network interface")
         if not found:
             self.logger.error("Configured interface: '%s' not found" % Config.NIC_NAME)
             self.logger.info("Using interface for '%s'" % str(globalIPs[0]))
@@ -339,7 +342,7 @@ class App(object):
         try:
             self.root_pub.send_pyobj(msg)
         except zmq.error.ZMQError as e:
-            raise PortOperationError("broadcast to peers (%d)" % e.errno) from e
+            raise PortOperationError(f"broadcast to peers [{e.errno}]") from e
         
     def collect_from_peers(self,arg=None):
         '''
@@ -355,7 +358,7 @@ class App(object):
                 if arg:
                     assert arg == msg
             except zmq.error.ZMQError as e:
-                raise PortOperationError("collect from peers (%d)" % e.errno) from e
+                raise PortOperationError(f"collect from peers [{e.errno}]") from e
             res[_h] = msg
         return res
 
@@ -371,7 +374,7 @@ class App(object):
             if arg:
                 assert arg == msg
         except zmq.error.ZMQError as e:
-            raise PortOperationError("recv from root (%d)" % e.errno) from e
+            raise PortOperationError(f"recv from root [{e.errno}]") from e
         return msg
     
     def send_to_root(self,msg):
@@ -384,7 +387,7 @@ class App(object):
         try:
             self.peer_pub.send_pyobj(msg)
         except zmq.error.ZMQError as e:
-            raise PortOperationError("send to root (%d)" % e.errno) from e
+            raise PortOperationError(f"send to root [{e.errno}]") from e
                    
     def setup(self):
         '''

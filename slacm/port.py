@@ -67,7 +67,7 @@ class Port(object):
         try:
             result = self.socket.send_pyobj(msg)
         except zmq.error.ZMQError as e:
-            raise PortOperationError("recv error (%d)" % e.errno) from e
+            raise PortOperationError(f"send error [{e.errno}]") from e
         return result
     
     def recv_pyobj(self):
@@ -77,7 +77,7 @@ class Port(object):
         try:
             result = self.socket.recv_pyobj()
         except zmq.error.ZMQError as e:
-            raise PortOperationError("recv error (%d)" % e.errno) from e
+            raise PortOperationError(f"recv error [{e.errno}]") from e
         return result
 
     def send(self,msg):
@@ -87,7 +87,7 @@ class Port(object):
         try:
             result = self.socket.send(msg)
         except zmq.error.ZMQError as e:
-            raise PortOperationError("recv error (%d)" % e.errno) from e
+            raise PortOperationError(f"send error [{e.errno}]") from e
         return result
     
     def recv(self):
@@ -97,7 +97,7 @@ class Port(object):
         try:
             result = self.socket.recv()
         except zmq.error.ZMQError as e:
-            raise PortOperationError("recv error (%d)" % e.errno) from e
+            raise PortOperationError(f"recv error [{e.errno}]") from e
         return result
     
     def formKey(self):

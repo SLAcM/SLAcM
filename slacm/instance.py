@@ -111,7 +111,7 @@ class Instance(object):
                 self.module_ = importlib.import_module(self.typeName)
                 self.modules[self.typeName] = self.module_ 
             except Exception as e:
-                raise LoadError ("%s: %s" % (type(e),e))
+                raise LoadError (f"{type(e)}: {e}" % (type(e),e)) from e
         else:
             self.module_ = self.modules[self.typeName]
     

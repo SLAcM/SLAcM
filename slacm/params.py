@@ -31,7 +31,7 @@ class Params(object):
         except FileNotFoundError:
             pass
         except Exception as e:
-            raise ParameterLoadError("parameter loading of '%s' failed: %s" % (self.param_file, str(e)))
+            raise ParameterLoadError(f"parameter loading of '{self.param_file}' failed: {e}") from e
     
     def is_host(self,host):
         return host in self.params if self.params else None

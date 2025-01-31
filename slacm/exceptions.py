@@ -44,4 +44,8 @@ class ParameterLoadError(SlacmException):
     def __init__(self, message):
         super().__init__(message)
         
+class BuildError(SlacmException):
+    def __init__(self, message):
+        super().__init__(message)
+        
         

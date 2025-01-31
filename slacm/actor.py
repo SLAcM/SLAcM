@@ -37,7 +37,7 @@ class Actor(object):
         self.name = model.name
         self.parentContext = self.parent.context
         self.childContext = None
-        self.logger.info('Actor.__init__:%s',self.name)
+        self.logger.info(f'Actor.__init__:{self.name}')
         self.instances = {}
         self.disco = self.parent.get_disco()
         self.netInfo = self.parent.get_netInfo()
