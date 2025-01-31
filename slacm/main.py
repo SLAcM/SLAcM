@@ -38,7 +38,7 @@ def restoreTerm():
 def terminate(_signal,_frame):
     global theApp
     restoreTerm()
-    theApp.terminate()
+    if theApp: theApp.terminate()
         
 def slacm():
     '''

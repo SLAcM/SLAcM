@@ -21,7 +21,7 @@ import logging
 from slacm.actor import Actor
 from slacm.config import Config
 from slacm.parser import parse_model
-from slacm.exceptions import PortOperationError,PeerOperationError
+from slacm.exceptions import PortOperationError,PeerOperationError,BuildError
 from slacm.utils import get_network_interfaces
 from slacm.discovery import DiscoveryService
 from slacm.params import Params

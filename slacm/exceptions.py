@@ -10,8 +10,7 @@ class SlacmException(Exception):
     '''
     def __init__(self, message):
         super().__init__(message)
-        
-        
+         
 class NotYetImplemented(SlacmException):
     def __init__(self, message):
         super().__init__(message)
