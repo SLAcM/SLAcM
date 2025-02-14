@@ -174,7 +174,7 @@ class DiscoveryClient(object):
     def get(self,key):
         '''
         Lookup the value belonging to the key in the discovery service.
-        Wait until the lokoup is successful. 
+        Wait until the lookup is successful. 
         '''
         ans = None
         tout = 3.0 if Config.DISC_TIMEOUT <= 0 else (Config.DISC_TIMEOUT / 1000.0)

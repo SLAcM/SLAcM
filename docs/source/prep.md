@@ -31,7 +31,7 @@ environment.
 - Install SLACM itself:
 ```
 $ cd SLAcM
-$ sudo pip install .
+$ sudo pip install . --break-system-packages
 ```
 *Note*: SLACM can be installed and used on the development host using any user name. However, if distributed applications are developed
 then a 'slacm' user account must be created on the target hosts. SLACM will download the applications to the target using that account, and will
@@ -44,14 +44,17 @@ run them under that user.
 Create a user 'slacm' and add it to the 'sudo' capable users:
 ```
 $ sudo adduser slacm
-$ usermod -aG sudo username
+$ usermod -aG sudo slacm
 ```
 Enable passwordless sudo for 'slacm' on the target hosts
 
 ```
 $ sudo -s
-$ echo "{slacm} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/slacm
+$ echo "slacm ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/slacm
+$ chmod ug=r,o=-rwx /etc/sudoers.d/slacm
+
 ```
+Some of the 'slacm_fab` commands require admin privileges on the _development_ host, so it is recommended to execute the commands for password-less `sudo` on that host as well. 
 
 ### Set up the target hosts for password-less access 
 

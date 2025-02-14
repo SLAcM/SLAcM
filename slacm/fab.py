@@ -1,4 +1,5 @@
 import os
+import getpass
 from typing import List
 from invoke import Program, Argument, Collection
 from invoke.parser import Argument
@@ -13,7 +14,7 @@ ns.add_collection(slacm.tasks,"do")
 
 Config.user="slacm"
 try:
-    Config.connect_kwargs = { "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() }
+    Config.connect_kwargs = { "key_filename": f"/home/{getpass.getuser()}/.ssh/id_rsa" }
 except:
     pass
 Config.version="0.0.2"

@@ -47,7 +47,7 @@ def get(ctx,fileName, local_path='.'):
     ctx.local("scp %s@%s:%s %s" % (ctx.config.user,ctx.host,fileName,local_path))
  
 @task
-def put(ctx,fileName, remote_path=''):
+def put(ctx,fileName, remote_path='.'):
     """Upload file to hosts:<file name>,[remote path]"""
     ctx.local("scp %s %s@%s:%s" % (fileName,ctx.config.user,ctx.host,remote_path))
      

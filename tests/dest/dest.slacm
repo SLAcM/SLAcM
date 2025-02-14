@@ -36,7 +36,7 @@ app DistributedEstimator:
        aggr : GlobalEstimator
        
 	 // Distributed version
-     host (rpi4car) Estimator
+     host (rpi4car.local) Estimator
      host root Aggregator
      
      

@@ -7,6 +7,7 @@ Created on Sep 18, 2020
 import collections
 import fabric
 import os
+import getpass
 import parse
 import pathlib
 import platform
@@ -155,7 +156,7 @@ class App(object):
                         try:
                             with fabric.connection.Connection(host,user=Config.TARGET_USER,
                                                               connect_kwargs = { 
-                                                                                "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() 
+                                                                                "key_filename": f"/home/{getpass.getuser()}/.ssh/id_rsa"
                                                                                 }) as conn:
                                 
                                 xfer = fabric.transfer.Transfer(conn)
@@ -169,7 +170,7 @@ class App(object):
                     try:
                         self.peer_group = fabric.ThreadingGroup(*self.peer_hosts,user=Config.TARGET_USER,
                                                                  connect_kwargs = { 
-                                                                                "key_filename": "/home/%s/.ssh/id_rsa" % os.getlogin() 
+                                                                                "key_filename": f"/home/{getpass.getuser()}/.ssh/id_rsa"
                                                                                 })
                     except Exception as e:
                         emsg = f"Couldn't form peer group: '{e}'"
