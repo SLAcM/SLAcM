@@ -1,5 +1,5 @@
 # root + rpi4car version
-rpi4car.local:
+rpi4car:
    PubActor:
     thePub:
       arg1: "this is arg1"

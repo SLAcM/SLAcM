@@ -2,12 +2,12 @@
 
 SLACM is distributed computing platform, and it runs a set of hosts connected via the network. For simplicity, all hosts are to be
 located on the same sub-net of a network. All hosts are expected to run Linux, to be specific Ubuntu 22.04  with Python 3.11 (or later) installed. 
-The host can be Linux machine, a Linuc virtual machine, a WSL instance running on Windows, or an embedded system running Linux. 
+The host can be Linux machine (e.g. a Raspberry Pi), a Linux virtual machine, a WSL instance running on Windows, or an embedded system running Linux.
 One specific host, called the _development_ host is where all the application source code, model, configuration  and related data files, etc.
 are located. Other hosts, called the _target_ hosts can run specific actors of the application. 
 
 Target hosts are optional, so an application can run on the development host only, on target hosts only, or on any combination 
-of the development and target hosts. If target hosts are used, they must have a special user (called 'slacm') that the SLACM 
+of the development and target hosts. If target hosts are used, they _must_ have a special user (called 'slacm') that the SLACM 
 framework is using to run application actors.
 
 ## Install SLACM
@@ -58,7 +58,7 @@ Some of the 'slacm_fab` commands require admin privileges on the _development_ h
 
 ### Set up the target hosts for password-less access 
 
-Use the the **development** host to set up key-based/password-less, key-based access to all target hosts. 
+Use the  **development** host to generate ```ssh``` keys and to set up key-based/password-less access to all target hosts. Note that the development host can also be a target host, but, in this case,  because the SLACM uses ```ssh``` to launch actors the development host must have a 'slacm' user, in addition to a _development_ user. The SLACM application will be created by the _development_ user and executed using the ```slacm_run``` under the user name 'slacm'. 
 
 - Generate a key-pair, without password, on the _development_ host. 
 

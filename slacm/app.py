@@ -22,7 +22,7 @@ import logging
 from slacm.actor import Actor
 from slacm.config import Config
 from slacm.parser import parse_model
-from slacm.exceptions import PortOperationError,PeerOperationError,BuildError
+from slacm.exceptions import PortOperationError,PeerOperationError,BuildError,ArgumentError
 from slacm.utils import get_network_interfaces
 from slacm.discovery import DiscoveryService
 from slacm.params import Params
@@ -56,12 +56,15 @@ class App(object):
         self.verbose = verbose
         self.mode = None
         if arg2:
-            parsed = parse.parse("{host}:{disco_port:d}:{pub_port:d}:{sub_port:d}",arg2)
-            self.root_host = parsed['host']
-            self.root_port = parsed['disco_port']
-            self.root_pub_port = parsed['pub_port']
-            self.root_sub_port = parsed['sub_port']
-            self.mode = App.MODE_PEER
+            try:
+                parsed = parse.parse("{host}:{disco_port:d}:{pub_port:d}:{sub_port:d}",arg2)
+                self.root_host = parsed['host']
+                self.root_port = parsed['disco_port']
+                self.root_pub_port = parsed['pub_port']
+                self.root_sub_port = parsed['sub_port']
+                self.mode = App.MODE_PEER
+            except:
+                raise ArgumentError(f"invalid --root argument for peer: {arg2}")
         
         self.app = None
         if self.mode == App.MODE_PEER:
@@ -133,17 +136,18 @@ class App(object):
             self.parse_deplo()
             if self.mode == App.MODE_PEER:
                 self.setup_peer_ports()
-                this_host = { self.hostname, self.netInfo.globalHost, self.netInfo.localHost }
-                for host in this_host:
+                host_aliases = { self.hostname, f"{self.hostname}.local", f"{self.hostname}.lan",\
+                                self.netInfo.globalHost, self.netInfo.localHost }
+                self.params_host = 'host'
+                for host in host_aliases:
                     if self.params.is_host(host):
                         self.params_host = host
                         break 
-                self.param_host = self.hostname
                 for host in self.peer_deplo:
-                    if host in this_host:
+                    if host in host_aliases:
                         for depl in self.peer_deplo[host]:
                             actorModel = depl.actor
-                            self.actors[actorModel.name]=Actor(self,actorModel)       
+                            self.actors[actorModel.name]=Actor(self,actorModel)    
             else:
                 self.mode = App.MODE_ROOT
                 self.params_host = 'root'
@@ -184,7 +188,7 @@ class App(object):
                 for depl in self.root_deplo:
                     actorModel = depl.actor
                     self.actors[actorModel.name]=Actor(self,actorModel)
-    
+        
     def get_actor_params(self,actor):
         '''
         Return the parameters specific to an actor of the application. 

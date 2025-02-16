@@ -1,4 +1,4 @@
-// 
+// hello2 - Distributed version
 
 app HelloApp:
     message Msg

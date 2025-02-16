@@ -46,5 +46,7 @@ class ParameterLoadError(SlacmException):
 class BuildError(SlacmException):
     def __init__(self, message):
         super().__init__(message)
-        
-        
+
+class ArgumentError(SlacmException):
+    def __init__(self, message):
+        super().__init__(message)
