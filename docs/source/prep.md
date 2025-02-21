@@ -83,7 +83,7 @@ Repeat the last two steps for each target host.
 
 ## slacm_fab commands
 
-There is a [`Fabric`](https://www.fabfile.org) script included in the package, that implements some useful commands, for interacting with the target hosts. These commands can be run using `slacm_fab` script in the source folder, where the fabfile is located. The script accepts the same arguments as the basic `fab` script. 
+There is a [`Fabric`](https://www.fabfile.org) script included in the package, that implements some useful commands, for interacting with the target hosts. These commands can be run using ```slacm_fab``` command, installed in the same location as ```slacm_run```
 
 Example:
 
@@ -95,21 +95,22 @@ Commands on the remote hosts are running under the `slacm` user name.
 
  The available commands are:
  - `do.check`: connects to the target nodes, and prints their system information
- - `do.requires`: installs the required 3rd party packages on the target nodes
- - `do.install`: installs SLACM on the local *development* host - must be run with 'sudo', and from the folder containing the `SLAcM' code base.
+ - `do.requires`: installs the required 3rd party packages on the target nodes. This needs to be done only once.
  - `do.deploy`: installs SLACM on *target* nodes - must be run from the folder containing the `SLAcM' code base.
- - `do.uninstall`: unistalless SLACM from the local *development* host - must be run with 'sudo'
- - `do.undeploy`: uninstalls SLACM from the target hosts
- 
  - `do.stop`: stops a running SLACM application (`slacm_run`) on the target hosts
  - `do.kill`: kills any lingering SLACM processes on all target nodes
  - `do.wipe`: wipe the 'slacm' user account clean on the target nodes
 
-  Internal commands (for developer's use only):
+ Internal commands (for package developer's use only):
  - `do.build`: rebuilds the SLACM package from source, on the local host 
  - `do.get`: retrieve a remote file from a target node
  - `do.put`: place a local file to a target node
  - `do.run`: run a command on a target node. Example: `slacm_fab -H HOST do.run "ls -al"`
  - `do.sudo`: run a sudo command on a target node. Example: `slacm_fab -H HOST do.sudo "ls -al /root"`
+ - `do.install`: installs SLACM on the local *development* host - must be run with 'sudo', and from the folder containing the `SLAcM' code base.
+ - `do.deploy`: installs SLACM on *target* nodes - must be run from the folder containing the `SLAcM' code base.
+ - `do.uninstall`: unistalless SLACM from the local *development* host - must be run with 'sudo'
+ - `do.undeploy`: uninstalls SLACM from the target hosts
+ 
 
  

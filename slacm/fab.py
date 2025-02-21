@@ -17,7 +17,8 @@ try:
     Config.connect_kwargs = { "key_filename": f"/home/{getpass.getuser()}/.ssh/id_rsa" }
 except:
     pass
-Config.version="0.0.2"
+# Note: version info
+Config.version="0.0.3"
 
 _program = Fab(namespace=ns,
                 name="slacm_fab",

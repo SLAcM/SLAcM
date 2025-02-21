@@ -32,7 +32,7 @@ def check(c):
 @task
 def install(c):
     """[sudo] Install package locally from current directory"""
-    c.sudo("pip install . -break-system-packages")
+    c.sudo("pip install . --break-system-packages")
     c.sudo("rm -fr dist/ build/ slacm.egg-info/")
     
 @task

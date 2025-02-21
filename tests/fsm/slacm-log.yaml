@@ -19,14 +19,14 @@ formatters:
 handlers:
   consoleHandler:
     class: logging.StreamHandler
-    level: INFO
+    level: WARNING
     formatter: simpleFormatter
     filters: [hostnameFilter]
     stream: ext://sys.stdout
 
 # Root logger - logs everything
 root:
-  level: INFO
+  level: WARNING
   propagate: 0
   handlers: [consoleHandler]
   
